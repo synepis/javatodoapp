@@ -7,7 +7,7 @@ os:
   - linux
 
 install:
-  - ./gradle wrapper
+  - ./gradlew wrapper
 
 script:
   - ./gradlew build
