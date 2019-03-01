@@ -13,10 +13,8 @@ import java.time.Instant;
 @Wither
 public class UserLogin {
 
-    @NonNull
     private long id;
 
-    @NonNull
     private long userId;
 
     @NonNull

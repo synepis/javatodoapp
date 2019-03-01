@@ -32,6 +32,8 @@ targetCompatibility = JavaVersion.VERSION_11
 dependencies {
     compileOnly "org.projectlombok:lombok:1.18.4"
     testCompileOnly "org.projectlombok:lombok:1.18.4"
+    annotationProcessor "org.projectlombok:lombok:1.18.4"
+    testAnnotationProcessor "org.projectlombok:lombok:1.18.4"
 
     compile "org.springframework.boot:spring-boot-starter-web:2.1.1.RELEASE"
     compile "org.springframework.boot:spring-boot-starter-jdbc:2.1.1.RELEASE"
@@ -59,5 +61,5 @@ dependencies {
 }
 
 wrapper {
-    gradleVersion = '5.0'
+    gradleVersion = '5.2'
 }
