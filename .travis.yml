@@ -4,7 +4,7 @@ os: linux
 dist: xenial
 
 install:
-  - ./gradlew wrapper
+  - gradle wrapper
 
 script:
   - ./gradlew build
