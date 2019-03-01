@@ -59,7 +59,3 @@ dependencies {
 
     testCompile "org.testcontainers:postgresql:1.10.2"
 }
-
-wrapper {
-    gradleVersion = '5.2'
-}
