@@ -1,0 +1,13 @@
+security.token.auth-token-lifetime: 600
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:15432/db_todo
+    password: Password@123
+    username: todo
+
+flyway:
+  enabled: true
+  password: Password@123
+  username: todo_flyway
+

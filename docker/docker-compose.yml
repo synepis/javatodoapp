@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:9.4
+    ports:
+      - 15432:5432
+    volumes:
+      - ./database/initdb/:/docker-entrypoint-initdb.d/:ro
+    networks:
+      - overlay
+
+  flyway:
+    image: boxfuse/flyway:5.2.1
+    command: -url=jdbc:postgresql://db/db_todo -user=todo -password=Password@123-connectRetries=60 migrate
+    volumes:
+      - ../src/main/resources/db/migration/:/flyway/sql
+      - ./database/flyway/:/flyway/sql/seed_data
+    depends_on:
+      - db
+    networks:
+      - overlay
+    environment:
+      FLYWAY_CONNECT_RETRIES: 30
+
+networks:
+  overlay:
