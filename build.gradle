@@ -62,10 +62,32 @@ dependencies {
     testCompile "org.testcontainers:postgresql:1.10.2"
 }
 
+task createVersionFile() {
+    dependsOn jar
+    file("deploy/set_version.sh").text ="""
+        #!/bin/bash
+        APPLICATION_JAR_FILENAME=$jar.archiveName\n
+    """.stripIndent()
+}
+
+task packageCodeDeployZip(type: Zip) {
+    dependsOn createVersionFile
+    from("$buildDir/libs/") {
+        include jar.archiveName
+    }
+
+    from("$rootDir/deploy/") {
+        include "**/*.*"
+    }
+}
+
+publish.dependsOn packageCodeDeployZip
+
 publishing {
     publications {
         maven(MavenPublication) {
             from components.java
+            artifact "$buildDir/distributions/${project.name}-${project.version}.zip"
         }
     }
     repositories {
@@ -111,9 +133,9 @@ def decorateBaseVersion(baseVersion) {
     println "base version: " + baseVersion
     println "git branch: " + gitBranch
     println "git commit: " + gitCommit
-    println "TRAVIS_COMMIT: " +  System.getenv("TRAVIS_COMMIT")
-    println "TRAVIS_BRANCH: " +  System.getenv("TRAVIS_BRANCH")
-    println "TRAVIS_PULL_REQUEST_BRANCH: " +  System.getenv("TRAVIS_PULL_REQUEST_BRANCH")
+    println "TRAVIS_COMMIT: " + System.getenv("TRAVIS_COMMIT")
+    println "TRAVIS_BRANCH: " + System.getenv("TRAVIS_BRANCH")
+    println "TRAVIS_PULL_REQUEST_BRANCH: " + System.getenv("TRAVIS_PULL_REQUEST_BRANCH")
     version
 }
 
