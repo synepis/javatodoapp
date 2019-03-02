@@ -13,7 +13,6 @@ plugins {
     id 'maven-publish'
     id 'org.springframework.boot' version '2.1.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-    id "org.ajoberstar.grgit" version "3.0.0"
 }
 
 
@@ -91,21 +90,33 @@ test {
 }
 
 def decorateBaseVersion(baseVersion) {
-    def gitBranch = grgit.branch.current().getName()
-    def gitCommitSha = grgit.head().id
+    def gitCommit = System.getenv("TRAVIS_COMMIT")
+    def travisBranch = System.getenv("TRAVIS_BRANCH")
+    def travisPrBranch = System.getenv("TRAVIS_PULL_REQUEST_BRANCH")
+
+    def gitBranch = travisPrBranch
+            ? travisPrBranch
+            : travisBranch
 
     def version = baseVersion
-    if (!gitBranch.isEmpty() && gitBranch!= "master") {
+    if (notBlank(gitBranch) && gitBranch != "master") {
         version += "-" + gitBranch
     }
 
-    if (!gitCommitSha.isEmpty()) {
-        version += "-" + gitCommitSha.substring(0, 8)
+    if (notBlank(gitCommit)) {
+        version += "-" + gitCommit.take(8)
     }
 
     println "Setting version: " + version
     println "base version: " + baseVersion
     println "git branch: " + gitBranch
-    println "git commit sha: " + gitCommitSha
+    println "git commit: " + gitCommit
+    println "TRAVIS_COMMIT: " +  System.getenv("TRAVIS_COMMIT")
+    println "TRAVIS_BRANCH: " +  System.getenv("TRAVIS_BRANCH")
+    println "TRAVIS_PULL_REQUEST_BRANCH: " +  System.getenv("TRAVIS_PULL_REQUEST_BRANCH")
     version
+}
+
+def notBlank(String string) {
+    string != null && string.trim() != ""
 }
