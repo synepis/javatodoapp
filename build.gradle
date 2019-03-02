@@ -10,9 +10,10 @@ buildscript {
 plugins {
     id 'java'
     id 'groovy'
+    id 'maven-publish'
     id 'org.springframework.boot' version '2.1.1.RELEASE'
     id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-    id 'maven-publish'
+    id "org.ajoberstar.grgit" version "3.0.0"
 }
 
 
@@ -25,6 +26,7 @@ bootJar {
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -89,13 +91,14 @@ test {
 }
 
 def decorateBaseVersion(baseVersion) {
-    def gitBranch = project.hasProperty("gitBranch") ? project.gitBranch : ""
-    def gitCommitSha = project.hasProperty("gitCommitSha") ? project.gitCommitSha : ""
+    def gitBranch = grgit.branch.current().getName()
+    def gitCommitSha = grgit.head().id
 
     def version = baseVersion
-    if (!gitBranch.isEmpty() &&  gitBranch!= "master") {
+    if (!gitBranch.isEmpty() && gitBranch!= "master") {
         version += "-" + gitBranch
     }
+
     if (!gitCommitSha.isEmpty()) {
         version += "-" + gitCommitSha.substring(0, 8)
     }
