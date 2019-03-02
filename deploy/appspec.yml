@@ -1,8 +1,14 @@
 version: 0.0
 os: linux
+
 files:
   - source: ./
     destination: /home/ubuntu/javatodoapp
+
+permissions:
+  - object: /home/ubuntu/javatodoapp/run.sh
+    mode: 775
+
 hooks:
   ApplicationStart:
     - location: run.sh

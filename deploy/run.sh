@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 echo 'Starting JavaTodoApp'
 
-source 'set_version.sh'
+source 'set-version.sh'
 echo "Running ${APPLICATION_JAR_FILENAME}"
 
 cd '/home/ubuntu/javatodoapp'
